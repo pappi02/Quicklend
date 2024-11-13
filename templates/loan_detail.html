@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Loan Details{% endblock %}
+
+{% block content %}
+    <h1>Loan Details</h1>
+
+    <div class="loan-details">
+        <p><strong>Loan ID:</strong> {{ loan.id }}</p>
+        <p><strong>Borrower:</strong> {{ loan.borrower.name }}</p>
+        <p><strong>Amount:</strong> {{ loan.amount }}</p>
+        <p><strong>Interest:</strong> {{ loan.calculate_total_interest }}</p>
+        <p><strong>Remaining Balance:</strong> {{ remaining_balance }}</p>
+        <p><strong>Total Paid:</strong> {{ total_paid }}</p>
+        <p><strong>Repayment Period:</strong> {{ loan.repayment_period_weeks }} weeks</p>
+        <p><strong>Status:</strong> {{ loan.status }}</p>
+        <p><strong>Loan Start Date:</strong> {{ loan.start_date }}</p>
+        <p><strong>Loan End Date:</strong> {{ loan.end_date }}</p>
+    </div>
+
+    <h2>Payments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Payment Date</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.date }}</td>
+                <td>{{ payment.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Make a Payment</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Payment</button>
+    </form>
+
+    <a href="{% url 'loan_list' %}">Back to Loan List</a>
+{% endblock %}
