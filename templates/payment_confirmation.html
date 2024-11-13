@@ -1,0 +1,20 @@
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
+
+{% block content %}
+<div class="payment-confirmation-container">
+    <h1>Payment Confirmation</h1>
+
+    <p>You have successfully made a payment for loan ID: {{ loan.id }}. The payment amount is KES {{ payment.amount }}.</p>
+
+    <p><strong>Remaining Balance:</strong> KES {{ remaining_balance }}</p>
+
+    <p>Thank you for your payment! Your loan status is now: {{ loan.status }}</p>
+
+    <a href="{% url 'loan_detail' loan.id %}" class="btn-back">Back to Loan Details</a>
+</div>
+{% endblock %}
+

@@ -1,0 +1,190 @@
+{% load form_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Loan</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="containercraete">
+        <h1>Create a New Loan</h1>
+
+        <!-- Display success or error messages -->
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Loan Form -->
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Display form errors if any -->
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        
+            <h3>Borrower Information</h3>
+            <div class="form-group">
+                <label for="id_name">Name</label>
+                {{ borrower_form.name }}
+                {% if borrower_form.name.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in borrower_form.name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_phone">Phone</label>
+                {{ borrower_form.phone }}
+                {% if borrower_form.phone.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in borrower_form.phone.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                {{ borrower_form.email }}
+                {% if borrower_form.email.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in borrower_form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_business_type">Loan Type</label>
+                {{ borrower_form.business_type }}
+                {% if borrower_form.business_type.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in borrower_form.business_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <h3>Loan Information</h3>
+            <div class="form-group">
+                <label for="id_amount">Amount</label>
+                {{ loan_form.amount }}
+                {% if loan_form.amount.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in loan_form.amount.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_interest_rate">Interest Rate</label>
+                {{ loan_form.interest_rate }}
+                {% if loan_form.interest_rate.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in loan_form.interest_rate.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_repayment_period_weeks">Repayment Period (Weeks)</label>
+                {{ loan_form.repayment_period_weeks }}
+                {% if loan_form.repayment_period_weeks.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in loan_form.repayment_period_weeks.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_start_date">Start Date</label>
+                {{ loan_form.start_date }}
+                {% if loan_form.start_date.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in loan_form.start_date.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <div class="form-group">
+                <label for="id_end_date">End Date</label>
+                {{ loan_form.end_date }}
+                {% if loan_form.end_date.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in loan_form.end_date.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <h3>Collateral Information (Optional)</h3>
+            <div class="form-group">
+                <label for="id_description">Description</label>
+                {{ collateral_form.description }}
+                {% if collateral_form.description.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in collateral_form.description.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_value">Value</label>
+                {{ collateral_form.value }}
+                {% if collateral_form.value.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in collateral_form.value.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_status">Status</label>
+                {{ collateral_form.status }}
+                {% if collateral_form.status.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in collateral_form.status.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Create Loan</button>
+        </form>
+    </div>
+</body>
+</html>

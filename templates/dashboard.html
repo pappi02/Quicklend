@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
+    <!-- Stats Section -->
+    <div class="stats">
+        <div>Total Loans: {{ total_loans }}</div>
+        <div>Total Loan Amount: {{ total_loan_amount }}</div>
+        <div>Total Interest Earned: {{ total_interest_earned }}</div>
+        <div>Overdue Loans: {{ overdue_loans_count }}</div>
+        <div>Paid-Off Loans: {{ paid_off_loans_count }}</div>
+        <div>Active Loans: {{ active_loans_count }}</div>
+    </div>
+
+    <!-- Placeholder for charts and tables -->
+    <div id="charts">
+        <!-- Future integration of charts like Chart.js can go here -->
+    </div>
+
+{% endblock %}

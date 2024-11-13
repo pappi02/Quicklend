@@ -1,0 +1,16 @@
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
+
+{% block content %}
+    <div class="success-message">
+        <h1>Loan Created Successfully!</h1>
+        <p>Your loan has been successfully created. You can view the details or create another loan.</p>
+
+        <!-- Add links for navigation -->
+        <a href="{% url 'loan_list' %}" class="btn-back">Go to Loan List</a>
+        <a href="{% url 'create_loan' %}" class="btn-create-new">Create Another Loan</a>
+    </div>
+{% endblock %}

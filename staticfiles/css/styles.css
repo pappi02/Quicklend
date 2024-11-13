@@ -1,0 +1,249 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    line-height: 1.6;
+    padding-top: 60px; /* Offset for fixed header */
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+}
+
+/* Header */
+header {
+    background-color: #3a3a3a;
+    color: white;
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    text-align: center;
+    font-size: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 30px;
+}
+
+/* Navbar */
+nav {
+    background-color: #333;
+    text-align: center;
+    padding: 10px;
+    position: sticky;
+    top: 60px; /* Below the header */
+    z-index: 999;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    font-size: 14px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #6c63ff;
+    border-radius: 5px;
+}
+
+/* Content Section */
+main {
+    padding: 30px;
+    margin-top: 100px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Stats Grid for Dashboard */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+.stats div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stats div .stat-title {
+    font-size: 18px;
+    color: #777;
+}
+
+.stats div .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+table th, table td {
+    padding: 12px 20px;
+    text-align: left;
+    border: 1px solid #f1f1f1;
+}
+
+table th {
+    background-color: #6c63ff;
+    color: white;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* Form Styling */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="submit"], button {
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #5752d1;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 24px;
+    }
+
+    nav ul {
+        text-align: center;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    table th, table td {
+        padding: 8px 12px;
+    }
+
+    .stats div {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 20px;
+    }
+
+    nav ul li {
+        margin: 0 8px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stats div {
+        font-size: 12px;
+    }
+}
+
+
+/* Style the "View Details" button */
+.view-details-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.view-details-btn:hover {
+    background-color: #0056b3; /* Darker blue when hovered */
+    transform: translateY(-2px); /* Lift the button on hover */
+}
+
+.view-details-btn:active {
+    background-color: #004085; /* Even darker blue when clicked */
+    transform: translateY(1px); /* Slightly lower the button on click */
+}

@@ -1,0 +1,53 @@
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+
+    <h1>Loan List</h1>
+
+    <!-- Search form -->
+    <form method="GET" action="{% url 'loan_list' %}">
+        <div class="search-container">
+            <input type="text" name="search" placeholder="Search by borrower's name/ID" value="{{ request.GET.search }}" class="search-input">
+            <button type="submit" class="search-btn">Search</button>
+        </div>
+    </form>
+
+    <table border="1" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Borrower</th>
+                <th>Amount</th>
+                <th>Interest</th>
+                <th>Repayment Period</th>
+                <th>Status</th>
+                <th>Statement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+            <tr>
+                <td>{{ loan.id }}</td>
+                <td>{{ loan.borrower.name }}</td>
+                <td>{{ loan.amount }}</td>
+                <td>{{ loan.calculate_total_interest }}</td>
+                <td>{{ loan.repayment_period_weeks }} weeks</td>
+                <td>{{ loan.status }}</td>
+                <td><a href="{% url 'loan_detail' loan.id %}" class="view-details-btn">View Details</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No loans found matching your search criteria.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

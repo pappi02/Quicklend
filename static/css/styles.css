@@ -1,0 +1,510 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    line-height: 1.6;
+    padding-top: 60px; /* Offset for fixed header */
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+}
+
+/* Header */
+header {
+    background-color: #3a3a3a;
+    color: white;
+    padding: 20px 0;
+    position: relative;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    text-align: center;
+    font-size: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 30px;
+    color: white;
+}
+
+/* Navbar */
+nav {
+    background-color: #333;
+    text-align: center;
+    padding: 10px;
+    position: sticky;
+    top: 60px; /* Below the header */
+    z-index: 999;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+    background-color: #45a049;
+    border-radius: 5px;
+}
+
+nav ul li a {
+    color: white;
+    font-size: 14px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #ffffff;
+    border-radius: 5px;
+    color: #000000;
+}
+
+/* Content Section */
+main {
+    padding: 30px;
+    margin-top: 100px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    
+}
+
+/* Stats Grid for Dashboard */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 30px auto;
+    
+}
+
+.stats div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stats div .stat-title {
+    font-size: 18px;
+    color: #777;
+}
+
+.stats div .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    position: center;
+}
+
+table th, table td {
+    padding: 12px 20px;
+    text-align: left;
+    border: 1px solid #f1f1f1;
+}
+
+table th {
+    background-color: #6c63ff;
+    color: white;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* Form Styling */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="submit"], button {
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #5752d1;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 24px;
+    }
+
+    nav ul {
+        text-align: center;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    table th, table td {
+        padding: 8px 12px;
+    }
+
+    .stats div {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 20px;
+    }
+
+    nav ul li {
+        margin: 0 8px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stats div {
+        font-size: 12px;
+    }
+}
+
+
+/* Style the "View Details" button */
+.view-details-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.view-details-btn:hover {
+    background-color: #0056b3; /* Darker blue when hovered */
+    transform: translateY(-2px); /* Lift the button on hover */
+}
+
+.view-details-btn:active {
+    background-color: #004085; /* Even darker blue when clicked */
+    transform: translateY(1px); /* Slightly lower the button on click */
+}
+
+
+/*loan creation success styles*/
+
+.success-message {
+    text-align: center;
+    padding: 2em;
+    background-color: #f4f8fb;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.success-message h1 {
+    font-size: 2em;
+    color: #4caf50;
+}
+
+.success-message p {
+    font-size: 1.2em;
+    margin: 1em 0;
+}
+
+.success-message a {
+    margin: 0.5em;
+    padding: 1em 2em;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.success-message a:hover {
+    background-color: #45a049;
+}
+
+
+
+/* create loan styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+}
+
+.containercreate {
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+form {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #fafafa;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Input Styles */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.2);
+}
+
+label {
+    font-weight: 500;
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Error Message Styles */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Button Styles */
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Form Section Spacing */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Success/Error Message Spacing */
+.alert {
+    margin-bottom: 20px;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin: 20px;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.3em;
+    }
+
+    button {
+        font-size: 1em;
+    }
+}
+
+
+/* search engine styles*/
+
+.search-container {
+    display: inline;
+    justify-content: center;  /* Centers the search box */
+    
+    
+}
+
+.search-input {
+    width: 500px;  /* You can adjust this value to make it smaller or larger */
+    padding: 4px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-btn {
+    padding: 8px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 4cm;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+
+/* payment confirmation styling */
+.payment-confirmation-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styling */
+.payment-confirmation-container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Paragraph styling */
+.payment-confirmation-container p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Strong tag styling */
+.payment-confirmation-container strong {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button styling */
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
+}
