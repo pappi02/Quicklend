@@ -9,7 +9,7 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     # Set the login page as the homepage (root URL '/')
-        path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),  # Login page at root
+    path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'), # Login page at root
     
     # Redirect to loan list page after login
     path('loan-list/', login_required(views.loan_list), name='loan_list'),  # Loan list after login
@@ -36,3 +36,4 @@ urlpatterns = [
 # Serve static files during development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

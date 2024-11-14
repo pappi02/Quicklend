@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -150,3 +151,23 @@ LOGOUT_REDIRECT_URL = 'login' # Redirect to home page (login page) after logout
 
 # Clear the session data upon closing the browser
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+MEDIA_URL = '/media/'  # This is the URL prefix for media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'Your Company Name <' + EMAIL_HOST_USER + '>'
+
+
+# settings.py
+#TWILIO_ACCOUNT_SID = 'AC2e2409163c8dd0ee5b036f69e816c3a4'
+#TWILIO_AUTH_TOKEN = '4a4ee1b9b075000f870273304373e287'
+#TWILIO_PHONE_NUMBER = '+14242709645'
