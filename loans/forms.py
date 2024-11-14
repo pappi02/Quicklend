@@ -10,8 +10,7 @@ class LoanForm(forms.ModelForm):
 
 
 
-# loans/forms.py
-from django import forms
+
 
 class CollateralForm(forms.ModelForm):
     class Meta:
