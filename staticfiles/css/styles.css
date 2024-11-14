@@ -27,7 +27,7 @@ header {
     background-color: #3a3a3a;
     color: white;
     padding: 20px 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     top: 0;
     left: 0;
@@ -39,40 +39,76 @@ header {
 
 header h1 {
     font-size: 30px;
-}
-
-/* Navbar */
-nav {
-    background-color: #333;
-    text-align: center;
-    padding: 10px;
-    position: sticky;
-    top: 60px; /* Below the header */
-    z-index: 999;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline-block;
-    margin: 0 15px;
-}
-
-nav ul li a {
     color: white;
-    font-size: 14px;
-    padding: 10px 20px;
-    text-transform: uppercase;
+}
+
+/* Navigation bar styling */
+.navbar {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0;
+}
+
+.nav-list li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
     transition: background 0.3s ease;
 }
 
-nav ul li a:hover {
-    background-color: #6c63ff;
-    border-radius: 5px;
+.nav-list li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
+
+/* Logout form and button styling */
+.logout-form {
+    display: inline;
+}
+
+.logout-button {
+    background-color: #e74a3b;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+}
+
+.logout-button:active {
+    transform: scale(0.95);
+}
+
+/* Additional styling for mobile responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+    .nav-list {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+
 
 /* Content Section */
 main {
@@ -81,6 +117,7 @@ main {
     background-color: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    
 }
 
 /* Stats Grid for Dashboard */
@@ -90,6 +127,7 @@ main {
     gap: 20px;
     max-width: 1200px;
     margin: 30px auto;
+    
 }
 
 .stats div {
@@ -122,6 +160,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 30px;
+    position: center;
 }
 
 table th, table td {
@@ -176,9 +215,10 @@ footer {
     color: white;
     text-align: center;
     padding: 15px 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     bottom: 0;
+    border-radius: 5px;
 }
 
 /* Responsive Styles */
@@ -246,4 +286,258 @@ footer {
 .view-details-btn:active {
     background-color: #004085; /* Even darker blue when clicked */
     transform: translateY(1px); /* Slightly lower the button on click */
+}
+
+
+/*loan creation success styles*/
+
+.success-message {
+    text-align: center;
+    padding: 2em;
+    background-color: #f4f8fb;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.success-message h1 {
+    font-size: 2em;
+    color: #4caf50;
+}
+
+.success-message p {
+    font-size: 1.2em;
+    margin: 1em 0;
+}
+
+.success-message a {
+    margin: 0.5em;
+    padding: 1em 2em;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.success-message a:hover {
+    background-color: #45a049;
+}
+
+
+
+/* create loan styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+}
+
+.containercreate {
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+form {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #fafafa;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Input Styles */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.2);
+}
+
+label {
+    font-weight: 500;
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Error Message Styles */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Button Styles */
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Form Section Spacing */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Success/Error Message Spacing */
+.alert {
+    margin-bottom: 20px;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin: 20px;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.3em;
+    }
+
+    button {
+        font-size: 1em;
+    }
+}
+
+
+/* search engine styles*/
+
+.search-container {
+    display: inline;
+    justify-content: center;  /* Centers the search box */
+    
+    
+}
+
+.search-input {
+    width: 500px;  /* You can adjust this value to make it smaller or larger */
+    padding: 4px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-btn {
+    padding: 8px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 4cm;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+
+/* payment confirmation styling */
+.payment-confirmation-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styling */
+.payment-confirmation-container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Paragraph styling */
+.payment-confirmation-container p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Strong tag styling */
+.payment-confirmation-container strong {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button styling */
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
 }

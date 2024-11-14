@@ -42,41 +42,73 @@ header h1 {
     color: white;
 }
 
-/* Navbar */
-nav {
-    background-color: #333;
-    text-align: center;
-    padding: 10px;
-    position: sticky;
-    top: 60px; /* Below the header */
-    z-index: 999;
+/* Navigation bar styling */
+.navbar {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-nav ul {
+.nav-list {
     list-style: none;
-    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0;
 }
 
-nav ul li {
-    display: inline-block;
-    margin: 0 15px;
-    background-color: #45a049;
-    border-radius: 5px;
-}
-
-nav ul li a {
-    color: white;
-    font-size: 14px;
-    padding: 10px 20px;
-    text-transform: uppercase;
+.nav-list li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
     transition: background 0.3s ease;
 }
 
-nav ul li a:hover {
-    background-color: #ffffff;
-    border-radius: 5px;
-    color: #000000;
+.nav-list li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
+
+/* Logout form and button styling */
+.logout-form {
+    display: inline;
+}
+
+.logout-button {
+    background-color: #e74a3b;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+}
+
+.logout-button:active {
+    transform: scale(0.95);
+}
+
+/* Additional styling for mobile responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+    .nav-list {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+
 
 /* Content Section */
 main {
@@ -183,9 +215,10 @@ footer {
     color: white;
     text-align: center;
     padding: 15px 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     bottom: 0;
+    border-radius: 5px;
 }
 
 /* Responsive Styles */

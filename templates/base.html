@@ -11,17 +11,20 @@
 <body>
     <header>
         <h1>Welcome to QuickLend Maseno</h1>
-        <nav>
-            <ul>
+        <nav class="navbar">
+            <ul class="nav-list">
                 <li><a href="{% url 'loan_list' %}">Loan List</a></li>
                 <li><a href="{% url 'create_loan' %}">Create Loan</a></li>
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-                
+                <li>
+                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" style="background-color: #e74a3b; color: #fff;">Logout</button>
+
+                    </form>
+                </li>
             </ul>
         </nav>
+        
     </header>
 
     <main>
@@ -31,6 +34,7 @@
 
     <footer>
         <p>&copy; 2024 QuickLend Maseno</p>
+        <p>powered by Am.nyonges@</p>
     </footer>
 </body>
 </html>

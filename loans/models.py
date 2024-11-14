@@ -36,7 +36,12 @@ class Loan(models.Model):
         ('paid_off', 'Paid Off'),
     ]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
-
+    @property
+    def total_amount(self):
+        # Assuming you calculate total_amount based on the amount and interest rate
+        return self.amount + self.calculate_total_interest()
+    
+    
     def __str__(self):
         return f"Loan {self.id} for {self.borrower.name}"
     
