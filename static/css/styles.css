@@ -73,29 +73,44 @@ header h1 {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Logout form and button styling */
+
+/* Style for the logout button */
 .logout-form {
-    display: inline;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
 }
 
-.logout-button {
-    background-color: #e74a3b;
-    color: #fff;
-    font-weight: 500;
-    border: none;
-    padding: 0.5rem 1.2rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.1s ease;
+.logout-form button {
+    background-color: #007bff; /* Modern blue */
+    color: white; /* White text */
+    font-size: 16px; /* Font size */
+    padding: 10px 20px; /* Padding around the text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
 }
 
-.logout-button:hover {
-    background-color: #c0392b;
+/* Button hover state */
+.logout-form button:hover {
+    background-color: #0056b3; /* Darker blue */
+    transform: scale(1.05); /* Slightly increase size on hover */
 }
 
-.logout-button:active {
-    transform: scale(0.95);
+/* Focus state for accessibility */
+.logout-form button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Blue shadow for focus */
 }
+
+/* Button disabled state */
+.logout-form button:disabled {
+    background-color: #ccc; /* Light grey for disabled */
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
+}
+
+
 
 /* Additional styling for mobile responsiveness */
 @media (max-width: 768px) {
