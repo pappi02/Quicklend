@@ -1,23 +1,23 @@
 import os
 from pathlib import Path
+import environ
+import pymysql
+
+# Install pymysql as MySQLdb
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# Initialize environment variables
+env = environ.Env(
+    DJANGO_DEBUG=(bool, False),
+)
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!q5echi!=v^r3!aa21j(@oo_a=3xmdt@*a$dgh3_mq-3q_bvp&'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+# Read the .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,8 +29,6 @@ INSTALLED_APPS = [
     'two_factor',
     'django_otp',
     'django_extensions',
-    
-    
 ]
 
 MIDDLEWARE = [
@@ -49,7 +47,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',  # Add this to specify where to look for templates
+            BASE_DIR / 'templates',  # Path for custom templates
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -63,7 +61,6 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'quicklend.wsgi.application'
 
 
@@ -76,53 +73,12 @@ DATABASES = {
 }
 
 
+# Other configurations (SECRET_KEY, DEBUG, ALLOWED_HOSTS, etc.)
+SECRET_KEY = env('SECRET_KEY')  # SECRET_KEY from .env
+DEBUG = env('DJANGO_DEBUG')  # DEBUG from .env
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'quicklend.website', 'www.quicklend.website'])
+
 # Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# Make sure static files are handled correctly
-STATIC_URL = '/static/'
-
-# Correct path to static files
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-
-# Enable the OTP static plugin
-OTP_STATIC = True
-
-
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -139,35 +95,49 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Internationalization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
 
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Redirect users to the loan list page after login
-LOGIN_REDIRECT_URL = '/dashboard/'  # Redirect to loan list after login
-
-# Optional: Customize the login redirect behavior when users are already logged in
-LOGOUT_REDIRECT_URL = 'login' # Redirect to home page (login page) after logout
-
-
-
-# Clear the session data upon closing the browser
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-
-MEDIA_URL = '/media/'  # This is the URL prefix for media files
+# Media files
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# OTP static plugin
+OTP_STATIC = True
 
+# Authentication settings
+LOGIN_REDIRECT_URL = '/dashboard/'  # Redirect after login
+LOGOUT_REDIRECT_URL = 'login'       # Redirect after logout
 
+# Session settings: expire sessions when the browser closes.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Email configuration - use environment variables
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'Your Company Name <' + EMAIL_HOST_USER + '>'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # Email user from .env
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # Email password from .env
+# DEFAULT_FROM_EMAIL = f'Your Company Name <{EMAIL_HOST_USER}>'
+
+# Optional: Uncomment and configure the following if you use Twilio.
+# TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID', default='')
+# TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN', default='')
+
+# Optional Production Settings:
+# If you are serving your site over HTTPS, consider enabling these:
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# You may also add additional logging or error reporting settings.
 
 
-# settings.py
-#TWILIO_ACCOUNT_SID = 'AC2e2409163c8dd0ee5b036f69e816c3a4'
-#TWILIO_AUTH_TOKEN = '4a4ee1b9b075000f870273304373e287'
-#TWILIO_PHONE_NUMBER = '+14242709645'
