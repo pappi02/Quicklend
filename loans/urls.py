@@ -22,7 +22,7 @@ urlpatterns = [
     
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     
-    path('account/', include('two_factor.urls')),  # Two-factor authentication (if you have it enabled)
+    #path('account/', include('two_factor.urls')),  # Two-factor authentication (if you have it enabled)
 
     path('dashboard/', login_required(views.dashboard), name='dashboard'),
     
