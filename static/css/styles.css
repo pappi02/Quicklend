@@ -1,558 +1,311 @@
-/* Global Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Existing status styles */
+.status-active {
+    color: green;
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f4f7fc;
-    color: #333;
-    line-height: 1.6;
-    padding-top: 60px; /* Offset for fixed header */
+.status-past_due {
+    color: red;
 }
 
-a {
-    text-decoration: none;
-    color: #333;
+.status-paid_off {
+    color: blue;
 }
 
-h1, h2, h3 {
-    font-weight: 700;
-}
-
-/* Header */
-header {
-    background-color: #3a3a3a;
-    color: white;
-    padding: 20px 0;
-    position: relative;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    text-align: center;
-    font-size: 24px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    font-size: 30px;
-    color: white;
-}
-
-/* Navigation bar styling */
-.navbar {
+/* Success page styles */
+.success-container {
     display: flex;
     justify-content: center;
-    background: linear-gradient(135deg, #4e73df, #1cc88a);
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.nav-list {
-    list-style: none;
-    display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
 }
 
-.nav-list li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    transition: background 0.3s ease;
+.success-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    padding: 40px;
+    text-align: center;
 }
 
-.nav-list li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+.success-header h1 {
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
-
-/* Style for the logout button */
-.logout-form {
-    display: inline-block;
-    margin: 0;
-    padding: 0;
+.success-subtitle {
+    color: #666;
+    font-size: 1.2em;
+    margin-bottom: 30px;
 }
 
-.logout-form button {
-    background-color: #007bff; /* Modern blue */
-    color: white; /* White text */
-    font-size: 16px; /* Font size */
-    padding: 10px 20px; /* Padding around the text */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
-}
-
-/* Button hover state */
-.logout-form button:hover {
-    background-color: #0056b3; /* Darker blue */
-    transform: scale(1.05); /* Slightly increase size on hover */
-}
-
-/* Focus state for accessibility */
-.logout-form button:focus {
-    outline: none; /* Remove default focus outline */
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Blue shadow for focus */
-}
-
-/* Button disabled state */
-.logout-form button:disabled {
-    background-color: #ccc; /* Light grey for disabled */
-    cursor: not-allowed; /* Change cursor to indicate disabled state */
-}
-
-
-
-/* Additional styling for mobile responsiveness */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-    }
-    .nav-list {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-}
-
-
-/* Content Section */
-main {
-    padding: 30px;
-    margin-top: 100px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    
-}
-
-/* Stats Grid for Dashboard */
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    max-width: 1200px;
-    margin: 30px auto;
-    
-}
-
-.stats div {
-    background-color: #fff;
+.loan-details, .collateral-details {
+    text-align: left;
+    margin-bottom: 30px;
+    background: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid #667eea;
 }
 
-.stats div:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+.loan-details h2, .collateral-details h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
 }
 
-.stats div .stat-title {
-    font-size: 18px;
-    color: #777;
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
 }
 
-.stats div .stat-value {
-    font-size: 32px;
-    font-weight: 700;
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.label {
+    font-weight: bold;
+    color: #555;
+}
+
+.value {
     color: #333;
 }
 
-/* Tables */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 30px;
-    position: center;
+.value.status-active {
+    color: green;
+    font-weight: bold;
 }
 
-table th, table td {
-    padding: 12px 20px;
-    text-align: left;
-    border: 1px solid #f1f1f1;
+.value.status-past_due {
+    color: red;
+    font-weight: bold;
 }
 
-table th {
-    background-color: #6c63ff;
-    color: white;
-    font-size: 18px;
-    text-transform: uppercase;
+.value.status-paid_off {
+    color: blue;
+    font-weight: bold;
 }
 
-table tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-table tbody tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-}
-
-/* Form Styling */
-input, select, textarea {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-input[type="submit"], button {
-    background-color: #6c63ff;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-}
-
-input[type="submit"]:hover, button:hover {
-    background-color: #5752d1;
-}
-
-/* Footer */
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 15px 0;
-    position: relative;
-    width: 100%;
-    bottom: 0;
-    border-radius: 5px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 24px;
-    }
-
-    nav ul {
-        text-align: center;
-    }
-
-    .stats {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    table th, table td {
-        padding: 8px 12px;
-    }
-
-    .stats div {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 20px;
-    }
-
-    nav ul li {
-        margin: 0 8px;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
-    .stats div {
-        font-size: 12px;
-    }
-}
-
-
-/* Style the "View Details" button */
-.view-details-btn {
+.btn {
     display: inline-block;
     padding: 12px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
     text-decoration: none;
-    background-color: #007bff; /* Blue background */
-    color: white;
     border-radius: 8px;
-    border: none;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.view-details-btn:hover {
-    background-color: #0056b3; /* Darker blue when hovered */
-    transform: translateY(-2px); /* Lift the button on hover */
-}
-
-.view-details-btn:active {
-    background-color: #004085; /* Even darker blue when clicked */
-    transform: translateY(1px); /* Slightly lower the button on click */
-}
-
-
-/*loan creation success styles*/
-
-.success-message {
-    text-align: center;
-    padding: 2em;
-    background-color: #f4f8fb;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.success-message h1 {
-    font-size: 2em;
-    color: #4caf50;
-}
-
-.success-message p {
-    font-size: 1.2em;
-    margin: 1em 0;
-}
-
-.success-message a {
-    margin: 0.5em;
-    padding: 1em 2em;
-    background-color: #4caf50;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.success-message a:hover {
-    background-color: #45a049;
-}
-
-
-
-/* create loan styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fc;
-    margin: 0;
-    padding: 0;
-}
-
-.containercreate {
-    width: 90%;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    font-size: 2.5em;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-h3 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-form {
-    padding: 30px;
-    border-radius: 10px;
-    background-color: #fafafa;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Input Styles */
-input, select, textarea {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
-    background-color: #fff;
+    font-weight: bold;
     transition: all 0.3s ease;
+    text-align: center;
+    min-width: 150px;
 }
 
-input:focus, select:focus, textarea:focus {
-    border-color: #4CAF50;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 128, 0, 0.2);
+.btn-primary {
+    background: #667eea;
+    color: white;
 }
 
-label {
-    font-weight: 500;
-    font-size: 1.1em;
-    color: #555;
-    margin-bottom: 5px;
+.btn-primary:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
 }
 
-textarea {
-    resize: vertical;
+.btn-secondary {
+    background: #f8f9fa;
+    color: #333;
+    border: 2px solid #667eea;
 }
 
-/* Error Message Styles */
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
 }
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+.btn-info {
+    background: #17a2b8;
+    color: white;
 }
 
-/* Button Styles */
-button {
-    width: 100%;
-    padding: 12px;
-    font-size: 1.2em;
-    color: #fff;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.btn-info:hover {
+    background: #138496;
+    transform: translateY(-2px);
 }
 
-button:hover {
-    background-color: #45a049;
-}
-
-/* Form Section Spacing */
-.form-group {
-    margin-bottom: 20px;
-}
-
-/* Success/Error Message Spacing */
-.alert {
-    margin-bottom: 20px;
-}
-
-/* Mobile Responsive Design */
+/* Responsive design */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
-        margin: 20px;
-    }
-
-    form {
+    .success-card {
         padding: 20px;
     }
 
-    h1 {
+    .success-header h1 {
         font-size: 2em;
     }
 
-    h3 {
-        font-size: 1.3em;
+    .actions {
+        flex-direction: column;
+        align-items: center;
     }
 
-    button {
-        font-size: 1em;
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .label {
+        margin-bottom: 5px;
     }
 }
 
-
-/* search engine styles*/
-
-.search-container {
-    display: inline;
-    justify-content: center;  /* Centers the search box */
-    
-    
-}
-
-.search-input {
-    width: 500px;  /* You can adjust this value to make it smaller or larger */
-    padding: 4px;
-    margin-right: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.search-btn {
-    padding: 8px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    width: 4cm;
-}
-
-.search-btn:hover {
-    background-color: #0056b3;
-}
-
-
-/* payment confirmation styling */
-.payment-confirmation-container {
-    max-width: 600px;
-    margin: 50px auto;
+/* Modern LMS styles for create loan form */
+body {
+    background: #f3f6fb;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Heading styling */
-.payment-confirmation-container h1 {
+.create-container {
+    max-width: 1300px;
+    margin: auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+}
+
+.create-container h1 {
     text-align: center;
-    color: #333;
-    font-size: 24px;
+    margin-bottom: 25px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1f2d5a;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e40af;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    grid-column: 1 / -1;
+    border-left: 5px solid #2563eb;
+    padding-left: 10px;
+}
+
+.form-card {
+    background: #fafafa;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+}
+
+.form-card label {
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 15px;
+    background: #fff;
+}
+
+.form-card input:focus,
+.form-card select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 4px rgba(37,99,235,0.3);
+}
+
+.upload-box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #475569;
+    transition: 0.3s;
+}
+
+.upload-box:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.submit-btn {
+    grid-column: 1 / -1;
+    padding: 15px;
+    background: #2563eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.alert {
+    grid-column: 1 / -1;
+    padding: 15px;
+    border-radius: 8px;
     margin-bottom: 20px;
 }
 
-/* Paragraph styling */
-.payment-confirmation-container p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 15px;
+.alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
 }
 
-/* Strong tag styling */
-.payment-confirmation-container strong {
-    font-weight: bold;
-    color: #333;
+.alert-danger {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
 }
 
-/* Button styling */
-.btn-back {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
+@media (max-width: 768px) {
+    .create-container {
+        padding: 15px;
+    }
 
-.btn-back:hover {
-    background-color: #0056b3;
+    .create-container h1 {
+        font-size: 24px;
+    }
+
+    .form-card {
+        padding: 15px;
+    }
 }

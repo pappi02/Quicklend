@@ -1,6 +1,6 @@
 {% block content %}
 {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loan_list.css' %}">
     <header>
         <nav>
             <ul>
@@ -40,7 +40,7 @@
                 <td>{{ loan.amount }}</td>
                 <td>{{ loan.calculate_total_interest }}</td>
                 <td>{{ loan.repayment_period_weeks }} weeks</td>
-                <td>{{ loan.status }}</td>
+                <td class="status-{{ loan.status }}">{{ loan.get_status_display }}</td>
                 <td><a href="{% url 'loan_detail' loan.id %}" class="view-details-btn">View Details</a></td>
             </tr>
             {% empty %}

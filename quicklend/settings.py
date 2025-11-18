@@ -149,8 +149,10 @@ LOGOUT_REDIRECT_URL = 'login' # Redirect to home page (login page) after logout
 
 
 
-# Clear the session data upon closing the browser
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Session settings for 5-minute inactivity timeout
+SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Reset session expiry on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Do not expire on browser close
 
 
 MEDIA_URL = '/media/'  # This is the URL prefix for media files
@@ -158,16 +160,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
+# Email configuration for Gmail SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'Your Company Name <' + EMAIL_HOST_USER + '>'
+EMAIL_HOST_USER = 'pappichulo2002@gmail.com'
+EMAIL_HOST_PASSWORD = 'uglkqipgixrejusd'
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'pappichulo2002@gmail.com'
 
 
 # settings.py
 #TWILIO_ACCOUNT_SID = 'AC2e2409163c8dd0ee5b036f69e816c3a4'
 #TWILIO_AUTH_TOKEN = '4a4ee1b9b075000f870273304373e287'
 #TWILIO_PHONE_NUMBER = '+14242709645'
+CSRF_TRUSTED_ORIGINS = [
+    "https://quicklend.site",
+    "https://www.quicklend.site",  # optional, if applicable
+]

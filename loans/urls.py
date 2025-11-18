@@ -16,18 +16,19 @@ urlpatterns = [
 
     # Other URL patterns
     path('loan/<int:loan_id>/', views.loan_detail, name='loan_detail'),
-    path('loan_reation_success/', views.loan_creation_success, name='loan_creation_success'),
+    path('loan_creation_success/', views.loan_creation_success, name='loan_creation_success'),
     
     path('create/', views.create_loan, name='create_loan'),
     
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     
-    path('account/', include('two_factor.urls')),  # Two-factor authentication (if you have it enabled)
+    # path('account/', include('two_factor.urls')),  # Two-factor authentication (if you have it enabled)
 
     path('dashboard/', login_required(views.dashboard), name='dashboard'),
     
 
     path('loan/<int:loan_id>/payment-confirmation/', views.payment_confirmation, name='payment_confirmation'),
+    path('verify_receipt/', views.verify_receipt, name='verify_receipt'),
 
     # Django's default authentication URLs (login, logout, password reset, etc.)
     path('accounts/', include('django.contrib.auth.urls')),  # Default authentication URLs for login, logout, password reset

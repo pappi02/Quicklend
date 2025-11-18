@@ -1,0 +1,40 @@
+/* Dashboard page styles */
+
+/* Stats section */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 40px;
+}
+
+.stats > div {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stats > div:nth-child(1) { border-left: 5px solid #007bff; } /* Total Loans */
+.stats > div:nth-child(2) { border-left: 5px solid #28a745; } /* Total Loan Amount */
+.stats > div:nth-child(3) { border-left: 5px solid #ffc107; } /* Total Interest Earned */
+.stats > div:nth-child(4) { border-left: 5px solid #dc3545; } /* Overdue Loans */
+.stats > div:nth-child(5) { border-left: 5px solid #17a2b8; } /* Paid-Off Loans */
+.stats > div:nth-child(6) { border-left: 5px solid #6f42c1; } /* Active Loans */
+
+/* Charts placeholder */
+#charts {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+    color: #666;
+}
