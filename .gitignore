@@ -14,4 +14,4 @@ migrations/
 # Ignore virtual environment
 quickie/
 quick/
-
+myenv/
