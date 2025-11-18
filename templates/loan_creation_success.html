@@ -1,16 +1,102 @@
 
+{% extends 'base.html' %}
+
+{% block title %}Loan Created Successfully - QuickLend Maseno{% endblock %}
+
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
-
+<link rel="stylesheet" href="{% static 'css/success.css' %}">
 
 {% block content %}
-    <div class="success-message">
-        <h1>Loan Created Successfully!</h1>
-        <p>Your loan has been successfully created. You can view the details or create another loan.</p>
+<div class="success-container">
+    <div class="success-card">
+        <div class="success-header">
+            <h1>Loan Created Successfully!</h1>
+            <p class="success-subtitle">Your loan has been processed and a receipt has been sent to the borrower.</p>
+        </div>
 
-        <!-- Add links for navigation -->
-        <a href="{% url 'loan_list' %}" class="btn-back">Go to Loan List</a>
-        <a href="{% url 'create_loan' %}" class="btn-create-new">Create Another Loan</a>
+        {% if loan and borrower %}
+        <div class="loan-details">
+            <h2>Loan Details</h2>
+            <div class="detail-row">
+                <span class="label">Loan ID:</span>
+                <span class="value">{{ loan.id }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Borrower Name:</span>
+                <span class="value">{{ borrower.name }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ borrower.email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ borrower.phone }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Business Type:</span>
+                <span class="value">{{ borrower.get_business_type_display }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Loan Amount:</span>
+                <span class="value">KES {{ loan.amount }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Interest Rate:</span>
+                <span class="value">{{ loan.interest_rate }}%</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Total Amount:</span>
+                <span class="value">KES {{ loan.total_amount }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Repayment Period:</span>
+                <span class="value">{{ loan.repayment_period_weeks }} weeks</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Start Date:</span>
+                <span class="value">{{ loan.start_date }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">End Date:</span>
+                <span class="value">{{ loan.end_date }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Status:</span>
+                <span class="value status-{{ loan.status }}">{{ loan.get_status_display }}</span>
+            </div>
+        </div>
+
+        <div class="collateral-details">
+            <h2>Collateral Information</h2>
+            {% if loan.collateral_set.exists %}
+                {% for collateral in loan.collateral_set.all %}
+                <div class="detail-row">
+                    <span class="label">Description:</span>
+                    <span class="value">{{ collateral.description }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Value:</span>
+                    <span class="value">KES {{ collateral.value }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Status:</span>
+                    <span class="value">{{ collateral.get_status_display }}</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No collateral provided.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="actions">
+            <a href="{% url 'loan_list' %}" class="btn btn-primary">Go to Loan List</a>
+            <a href="{% url 'create_loan' %}" class="btn btn-secondary">Create Another Loan</a>
+            {% if loan %}
+            <a href="{% url 'loan_detail' loan.id %}" class="btn btn-info">View Loan Details</a>
+            {% endif %}
+        </div>
     </div>
+</div>
 {% endblock %}

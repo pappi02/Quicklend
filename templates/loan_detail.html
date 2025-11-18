@@ -1,8 +1,10 @@
-{% extends 'base.html' %}
 
-{% block title %}Loan Details{% endblock %}
+
+
 
 {% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/loan_detail.css' %}">
     <h1>Loan Details</h1>
 
     <div class="loan-details">
@@ -16,6 +18,27 @@
         <p><strong>Status:</strong> {{ loan.status }}</p>
         <p><strong>Loan Start Date:</strong> {{ loan.start_date }}</p>
         <p><strong>Loan End Date:</strong> {{ loan.end_date }}</p>
+    </div>
+
+    <h2>Collateral</h2>
+    <div class="collateral-details">
+        {% if loan.collateral_set.exists %}
+            {% for collateral in loan.collateral_set.all %}
+                <p><strong>Description:</strong> {{ collateral.description|default:"No description" }}</p>
+                <p><strong>Value:</strong> {{ collateral.value|default:"Not specified" }}</p>
+                <p><strong>Status:</strong> {{ collateral.get_status_display }}</p>
+                {% if collateral.images.all %}
+                    <p><strong>Images:</strong></p>
+                    <ul>
+                        {% for image in collateral.images.all %}
+                            <li><img src="{{ image.image.url }}" alt="Collateral Image" style="max-width: 200px;"></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No collateral provided.</p>
+        {% endif %}
     </div>
 
     <h2>Payments</h2>

@@ -10,13 +10,15 @@ class Borrower(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
-    email = models.EmailField(unique=True)
+    email = models.EmailField()
     BUSINESS_TYPE_CHOICES = [
         ('student', 'Student'),
         ('business', 'Business'),
     ]
 
     business_type = models.CharField(max_length=10, choices=BUSINESS_TYPE_CHOICES)
+    front_id = models.ImageField(upload_to='borrower_ids/', blank=True, null=True)
+    back_id = models.ImageField(upload_to='borrower_ids/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -32,10 +34,12 @@ class Loan(models.Model):
     end_date = models.DateField()
     STATUS_CHOICES = [
         ('active', 'Active'),
-        ('overdue', 'Overdue'),
+        ('past_due', 'Past Due'),
         ('paid_off', 'Paid Off'),
     ]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    receipt_serial = models.CharField(max_length=20, blank=True, null=True, unique=True)
+    receipt_hash = models.CharField(max_length=128, blank=True, null=True)
     @property
     def total_amount(self):
         # Assuming you calculate total_amount based on the amount and interest rate
@@ -49,27 +53,30 @@ class Loan(models.Model):
         """
         Calculate the total interest for the loan using the flat-rate method.
         """
-        return (self.amount * self.interest_rate * self.repayment_period_weeks) / 100
+        return (self.amount * self.interest_rate ) / 100
 
-    def calculate_total_repayment(self):
-        """
-        Calculate the total repayment (principal + interest).
-        """
-        return self.amount + self.calculate_total_interest()
+   
 
     def calculate_remaining_balance(self):
+        if self.pk is None:
+            # For new loans, no payments exist yet
+            return self.amount + self.calculate_total_interest()
         total_paid = self.payments.aggregate(Sum('amount'))['amount__sum'] or 0
-        return self.amount + (self.amount * (self.interest_rate / 100)) - total_paid
+        return self.amount + self.calculate_total_interest() - total_paid
 
     def update_status(self):
         # Check if the loan is fully paid off
         if self.calculate_remaining_balance() <= 0:
             self.status = 'paid_off'
         elif self.end_date < date.today():
-            self.status = 'overdue'
+            self.status = 'past_due'
         else:
             self.status = 'active'
-        self.save()
+        # Don't save here to avoid recursion; save will be called separately
+
+    def save(self, *args, **kwargs):
+        self.update_status()
+        super().save(*args, **kwargs)
 
 
 # Collateral Table
@@ -118,13 +125,22 @@ class Payment(models.Model):
         if self.loan.calculate_remaining_balance() <= 0:
             self.loan.status = 'paid_off'
         elif self.loan.status != 'paid_off' and self.is_late:
-            self.loan.status = 'overdue'
+            self.loan.status = 'past_due'
 
         # Save the updated loan status
         self.loan.save()
 
     def __str__(self):
         return f"Payment {self.id} for Loan {self.loan.id}"
+
+# Collateral Images Table
+class CollateralImage(models.Model):
+    id = models.AutoField(primary_key=True)
+    collateral = models.ForeignKey(Collateral, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='collateral_images/')
+
+    def __str__(self):
+        return f"Image for Collateral {self.collateral.id}"
 
 # Transaction History Table
 class TransactionHistory(models.Model):

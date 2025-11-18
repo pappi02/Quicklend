@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages  # Correct import for messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import BorrowerForm, CollateralForm, LoanForm, PaymentForm
-from .models import Borrower, Loan
+from .models import Borrower, Loan, Collateral, CollateralImage
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -20,7 +20,6 @@ from io import BytesIO
 
 
 
-@user_passes_test(lambda user: user.is_staff)
 @login_required
 def loan_list(request):
     search_query = request.GET.get('search', '')
@@ -58,7 +57,7 @@ def loan_detail(request, loan_id):
             if loan.calculate_remaining_balance() <= 0:
                 loan.status = 'paid_off'
             elif loan.end_date < date.today():
-                loan.status = 'overdue'
+                loan.status = 'past_due'
             else:
                 loan.status = 'active'
 
@@ -102,10 +101,10 @@ def payment_confirmation(request, loan_id):
 @login_required
 def create_loan(request):
     if request.method == "POST":
-        # Initialize the forms with POST data
-        borrower_form = BorrowerForm(request.POST)
+        # Initialize the forms with POST data and FILES
+        borrower_form = BorrowerForm(request.POST, request.FILES)
         loan_form = LoanForm(request.POST)
-        collateral_form = CollateralForm(request.POST)
+        collateral_form = CollateralForm(request.POST, request.FILES)
 
         if borrower_form.is_valid() and loan_form.is_valid():
             # Check if the borrower already exists by email
@@ -116,19 +115,38 @@ def create_loan(request):
                     'name': borrower_form.cleaned_data['name'],
                     'phone': borrower_form.cleaned_data['phone'],
                     'business_type': borrower_form.cleaned_data['business_type'],
+                    'front_id': borrower_form.cleaned_data.get('front_id'),
+                    'back_id': borrower_form.cleaned_data.get('back_id'),
                 }
             )
+
+            # If borrower already exists, update their information
+            if not created:
+                borrower.name = borrower_form.cleaned_data['name']
+                borrower.phone = borrower_form.cleaned_data['phone']
+                borrower.business_type = borrower_form.cleaned_data['business_type']
+                borrower.front_id = borrower_form.cleaned_data.get('front_id')
+                borrower.back_id = borrower_form.cleaned_data.get('back_id')
+                borrower.save()
 
             # Create and save the loan
             loan = loan_form.save(commit=False)
             loan.borrower = borrower  # Attach the borrower to the loan
             loan.save()
 
+            # Initialize collateral to None
+            collateral = None
+
             # If collateral form is valid, save collateral
             if collateral_form.is_valid():
                 collateral = collateral_form.save(commit=False)
                 collateral.loan = loan  # Attach the loan to the collateral
                 collateral.save()
+
+                # Handle multiple collateral images
+                images = request.FILES.getlist('collateral_images')
+                for image in images:
+                    CollateralImage.objects.create(collateral=collateral, image=image)
 
             # Generate the loan agreement and receipt PDF
             loan_data = {
@@ -137,36 +155,37 @@ def create_loan(request):
                 'total_amount': loan.total_amount,  # Ensure total_amount exists
                 'start_date': loan.start_date,
                 'end_date': loan.end_date,
-                'collateral': collateral_form.cleaned_data.get('collateral', '') if collateral_form.is_valid() else None,
+                'collateral': collateral.description if collateral else None,
                 'phone_number': borrower.phone,
                 'email': borrower.email,
             }
 
             # Set the file path for saving the PDF (ensure the directory exists)
-            pdf_directory = '/home/munga/quicklend/media/pdfs/'  # Adjust the directory path as needed
+            pdf_directory = os.path.join(settings.MEDIA_ROOT, 'pdfs')  # Use MEDIA_ROOT for cross-platform compatibility
             if not os.path.exists(pdf_directory):
                 os.makedirs(pdf_directory)  # Create the directory if it doesn't exist
 
             # Include the file name in the path
             pdf_file_path = os.path.join(pdf_directory, 'loan_agreement_receipt.pdf')
 
-            # Generate the PDF for loan agreement and receipt
-            generate_loan_pdf(loan_data, pdf_file_path)
+            # Generate the PDF for loan agreement and receipt using new secure generator
+            from .pdf_generator_v2 import generate_loan_pdf_v2
+            verification_base_url = request.build_absolute_uri('/verify_receipt/')
+            result = generate_loan_pdf_v2(loan_data, pdf_file_path, verification_base_url=verification_base_url)
 
-            # Get the server IP address and port
-            server_ip = "192.168.1.106:8000" 
-
-            # Define the download link
-            email_link = f"http://{server_ip}/media/pdfs/loan_agreement_receipt.pdf"
+            # Save serial and hash to loan
+            loan.receipt_serial = result['serial']
+            loan.receipt_hash = result['hash']
+            loan.save()
 
             # Send SMS with the download link
             #send_sms_with_link(borrower.phone, email_link)
 
-            # Send email with the download link
-            send_email_with_link(borrower.email, email_link)
+            # Send email with the PDF attached
+            send_email_with_attachment(borrower.email, pdf_file_path)
 
             # Success message
-            messages.success(request, 'Loan created successfully. Receipt sent via SMS and Email.')
+            messages.success(request, 'Loan created successfully. Receipt attached to Email.')
 
             # Redirect to loan creation success page
             return redirect('loan_creation_success')  # Update this to the success URL
@@ -216,24 +235,94 @@ def send_sms_with_link(phone_number, sms_link):
         print(f"Error sending SMS: {e}")
 '''
 
-def send_email_with_link(email, download_link):
+def send_email_with_attachment(email, pdf_file_path):
     """
-    Function to send an email with the download link.
+    Function to send an HTML email with the PDF attached.
     """
-    subject = 'Your Loan Agreement and Receipt'
-    message = f"Dear borrower, your loan agreement and receipt are ready. Download it here: {download_link}"
+    from django.core.mail import EmailMessage
+
+    subject = 'Your Loan Agreement and Receipt - QuickLend Maseno'
+    html_message = """
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }}
+            .container {{
+                max-width: 600px;
+                margin: 20px auto;
+                background-color: #ffffff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }}
+            .header {{
+                background-color: #667eea;
+                color: #ffffff;
+                padding: 20px;
+                text-align: center;
+                border-radius: 8px 8px 0 0;
+            }}
+            .content {{
+                padding: 20px;
+                color: #333333;
+            }}
+            .footer {{
+                background-color: #f8f9fa;
+                padding: 10px;
+                text-align: center;
+                color: #666666;
+                border-radius: 0 0 8px 8px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>QuickLend Maseno</h1>
+                <p>Your Trusted Loan Partner</p>
+            </div>
+            <div class="content">
+                <h2>Dear Borrower,</h2>
+                <p>Thank you for choosing QuickLend Maseno for your loan needs. Your loan agreement and receipt have been successfully processed and are attached to this email.</p>
+                <p>Please find your loan agreement and receipt attached as a PDF file.</p>
+                <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+                <p>Best regards,<br>The QuickLend Maseno Team</p>
+            </div>
+            <div class="footer">
+                <p>&copy; 2023 QuickLend Maseno. All rights reserved.</p>
+                <p>For support, email us at support@quicklend.co.ke</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    plain_message = "Dear borrower, your loan agreement and receipt are attached to this email."
     from_email = settings.EMAIL_HOST_USER
     recipient_list = [email]
 
     try:
-        send_mail(subject, message, from_email, recipient_list)
-        print(f"Email sent to {email}")
+        email_message = EmailMessage(subject, plain_message, from_email, recipient_list)
+        email_message.attach_file(pdf_file_path, 'application/pdf')
+        email_message.send()
+        print(f"Email with attachment sent to {email}")
     except Exception as e:
         print(f"Error sending email: {e}")
 
 
 def loan_creation_success(request):
-    return render(request, 'loan_creation_success.html')
+    # Retrieve the latest loan created (assuming it's the most recent one)
+    loan = Loan.objects.last()
+    borrower = loan.borrower if loan else None
+    context = {
+        'loan': loan,
+        'borrower': borrower,
+    }
+    return render(request, 'loan_creation_success.html', context)
 
 
 
@@ -246,8 +335,8 @@ def dashboard(request):
     total_loan_amount = Loan.objects.aggregate(Sum('amount'))['amount__sum'] or 0
     total_interest_earned = sum([loan.calculate_total_interest() for loan in Loan.objects.all()])
 
-    # Additional metrics (e.g., overdue loans)
-    overdue_loans_count = Loan.objects.filter(status='overdue').count()
+    # Additional metrics (e.g., past due loans)
+    past_due_loans_count = Loan.objects.filter(status='past_due').count()
     paid_off_loans_count = Loan.objects.filter(status='paid_off').count()
     active_loans_count = Loan.objects.filter(status='active').count()
 
@@ -255,7 +344,7 @@ def dashboard(request):
         'total_loans': total_loans,
         'total_loan_amount': total_loan_amount,
         'total_interest_earned': total_interest_earned,
-        'overdue_loans_count': overdue_loans_count,
+        'past_due_loans_count': past_due_loans_count,
         'paid_off_loans_count': paid_off_loans_count,
         'active_loans_count': active_loans_count,
     }
@@ -268,48 +357,75 @@ def dashboard(request):
 def generate_loan_pdf(loan_data, file_path):
     c = canvas.Canvas(file_path, pagesize=A6)  # Adjusted to A6 for a compact look
 
-    # Modern font and adjusted layout for compact page
-    c.setFont("Helvetica-Bold", 12)  # Smaller font for a smaller page
-    c.drawString(50, 400, "Loan Agreement and Receipt")
-    c.setFont("Helvetica", 8)  # Small, readable font size
-    c.drawString(30, 380, f"Borrower: {loan_data['borrower_name']}")
-    c.drawString(30, 365, f"Loan Amount: KES {loan_data['loan_amount']}")
-    c.drawString(30, 350, f"Total Amount to be Paid: KES {loan_data['total_amount']}")
-    c.drawString(30, 335, f"Start Date: {loan_data['start_date']}")
-    c.drawString(30, 320, f"End Date: {loan_data['end_date']}")
-    c.drawString(30, 305, f"Collateral: {loan_data['collateral'] if loan_data['collateral'] else 'None'}")
+    # Set background color for header
+    c.setFillColor(colors.HexColor('#667eea'))
+    c.rect(0, 350, 297, 50, fill=1)
 
-    # Terms and Conditions section with compact layout
-    c.setFont("Helvetica-Oblique", 6)  # Smaller font for terms
-    c.drawString(30, 290, "Terms and Conditions:")
-    c.drawString(30, 275, "1. The loan must be repaid in full by the end date.")
-    c.drawString(30, 260, "2. Non-payment may result in penalties or collateral loss.")
-
-    c.drawString(30, 245, "3. Any disputes will be settled according to the governing laws.")
-    
-    # Add some space for signature section
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(30, 215, "Borrower Signature:")
+    # Header text
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, 370, "QuickLend Maseno")
     c.setFont("Helvetica", 10)
-    c.drawString(30, 200, "_______________________  Date: __________")
-    
-    # Signature placeholder (could be replaced with a digital signature later)
+    c.drawString(50, 355, "Loan Agreement and Receipt")
+
+    # Borrower details section
+    c.setFillColor(colors.black)
     c.setFont("Helvetica-Bold", 10)
-    c.drawString(30, 170, "Signed by: QuickLend Maseno")
-    
-    # Add logo or brand name (if applicable)
-    # c.drawImage('logo.png', 450, 750, width=100, height=50)  # Optional logo
-    
-    # Draw border for the document for modern look
+    c.drawString(30, 330, "Borrower Information:")
+    c.setFont("Helvetica", 8)
+    c.drawString(30, 315, f"Name: {loan_data['borrower_name']}")
+    c.drawString(30, 300, f"Phone: {loan_data['phone_number']}")
+    c.drawString(30, 285, f"Email: {loan_data['email']}")
+
+    # Loan details section
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(30, 265, "Loan Details:")
+    c.setFont("Helvetica", 8)
+    c.drawString(30, 250, f"Loan Amount: KES {loan_data['loan_amount']}")
+    c.drawString(30, 235, f"Total Amount to be Paid: KES {loan_data['total_amount']}")
+    c.drawString(30, 220, f"Start Date: {loan_data['start_date']}")
+    c.drawString(30, 205, f"End Date: {loan_data['end_date']}")
+    c.drawString(30, 190, f"Collateral: {loan_data['collateral'] if loan_data['collateral'] else 'None'}")
+
+    # Terms and Conditions section with enhanced styling
+    c.setFillColor(colors.HexColor('#f0f0f0'))
+    c.rect(20, 140, 257, 40, fill=1)
+    c.setFillColor(colors.black)
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(30, 170, "Terms and Conditions:")
+    c.setFont("Helvetica", 6)
+    c.drawString(30, 160, "1. The loan must be repaid in full by the end date.")
+    c.drawString(30, 150, "2. Non-payment may result in penalties or collateral loss.")
+    c.drawString(30, 140, "3. Any disputes will be settled according to the governing laws.")
+
+    # Signature section
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(30, 110, "Borrower Signature:")
+    c.setFont("Helvetica", 8)
+    c.drawString(30, 95, "_______________________  Date: __________")
+
+    # Company signature
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(30, 75, "Authorized by: QuickLend Maseno")
+    c.drawString(30, 65, "_______________________  Date: __________")
+
+    # Footer
+    c.setFillColor(colors.HexColor('#667eea'))
+    c.rect(0, 0, 297, 30, fill=1)
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica", 6)
+    c.drawString(30, 15, "Thank you for choosing QuickLend Maseno. For inquiries, contact us at support@quicklend.co.ke")
+
+    # Draw border for the document
     c.setStrokeColor(colors.black)
-    c.rect(10, 10, 277, 400)
-    
+    c.setLineWidth(2)
+    c.rect(5, 5, 287, 407)
+
     # Finalize the PDF
     c.save()
 
-
     # Add a digital signature (text overlay) for authenticity
-    add_digital_signature(file_path, file_path, "Authorized Signature: QuickLend")
+    add_digital_signature(file_path, file_path, "Authorized Signature: QuickLend Maseno")
 
 
 def add_digital_signature(input_pdf_path, output_pdf_path, signature_text):
@@ -356,7 +472,7 @@ def save_locally(file_path, file_name):
     """
     # Define the directory to save the files (e.g., 'media/pdfs')
     save_dir = os.path.join(settings.BASE_DIR, 'media', 'pdfs')
-    
+
     # Make sure the directory exists, create if not
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -368,11 +484,35 @@ def save_locally(file_path, file_name):
         # Save the file locally
         with open(full_file_path, 'wb') as f:
             f.write(file_path)
-        
+
         return full_file_path
     except Exception as e:
         print(f"Error saving file locally: {e}")
         return None
+
+
+from django.http import JsonResponse, HttpResponseBadRequest
+from .models import Loan
+
+def verify_receipt(request):
+    s = request.GET.get("s")  # serial
+    h = request.GET.get("h")  # hash
+    if not s or not h:
+        return HttpResponseBadRequest("Missing parameters")
+
+    try:
+        loan = Loan.objects.get(receipt_serial=s)
+    except Loan.DoesNotExist:
+        return JsonResponse({"status":"not_found", "message":"Receipt not found"}, status=404)
+
+    valid = (loan.receipt_hash == h)
+    return JsonResponse({
+        "status": "ok",
+        "serial": s,
+        "valid": valid,
+        "loan_id": loan.id if valid else None,
+        "borrower": loan.borrower.name if valid else None
+    })
     
 
 
