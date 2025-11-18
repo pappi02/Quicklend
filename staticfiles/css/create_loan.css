@@ -1,0 +1,114 @@
+/* Modern LMS styles for create loan form */
+body {
+    background: #f3f6fb;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    padding: 20px;
+}
+
+.create-container {
+    max-width: 1300px;
+    margin: auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+}
+
+.create-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1f2d5a;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e40af;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    grid-column: 1 / -1;
+    border-left: 5px solid #2563eb;
+    padding-left: 10px;
+}
+
+.form-card {
+    background: #fafafa;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+}
+
+.form-card label {
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 15px;
+    background: #fff;
+}
+
+.form-card input:focus,
+.form-card select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 4px rgba(37,99,235,0.3);
+}
+
+.upload-box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #475569;
+    transition: 0.3s;
+}
+
+.upload-box:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.submit-btn {
+    grid-column: 1 / -1;
+    padding: 15px;
+    background: #2563eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .create-container {
+        padding: 15px;
+    }
+
+    .create-container h1 {
+        font-size: 24px;
+    }
+
+    .form-card {
+        padding: 15px;
+    }
+}

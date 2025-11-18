@@ -1,5 +1,9 @@
 from django import forms
-from .models import Borrower, Loan, Collateral, Payment
+from .models import Borrower, Loan, Collateral, Payment, CollateralImage
+
+
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
 
 
 class LoanForm(forms.ModelForm):
@@ -11,8 +15,9 @@ class LoanForm(forms.ModelForm):
 
 
 
-
 class CollateralForm(forms.ModelForm):
+    collateral_images = forms.FileField(widget=MultipleFileInput(attrs={'multiple': True}), required=False)
+
     class Meta:
         model = Collateral
         fields = ['description', 'value', 'status']
@@ -28,4 +33,4 @@ class PaymentForm(forms.ModelForm):
 class BorrowerForm(forms.ModelForm):
     class Meta:
         model = Borrower
-        fields = ['name', 'phone', 'email', 'business_type']
+        fields = ['name', 'phone', 'email', 'business_type', 'front_id', 'back_id']
