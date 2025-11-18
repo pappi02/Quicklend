@@ -22,7 +22,11 @@ urlpatterns = [
     
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     
+<<<<<<< HEAD
     # path('account/', include('two_factor.urls')),  # Two-factor authentication (if you have it enabled)
+=======
+    #path('account/', include('two_factor.urls')),  # Two-factor authentication (if you have it enabled)
+>>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
 
     path('dashboard/', login_required(views.dashboard), name='dashboard'),
     
