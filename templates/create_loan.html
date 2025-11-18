@@ -8,7 +8,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Loan</title>
-<<<<<<< HEAD
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     {% load static %}
@@ -16,151 +15,114 @@
 </head>
 <body>
     <div class="create-container">
-=======
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container-create">
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
-        <h1>Create a New Loan</h1>
+        {% load static %}
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Create Loan</title>
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        </head>
+        <body>
+        <div class="container py-5">
+            <h1 class="mb-4">Create a New Loan</h1>
 
-        {% if messages %}
-<<<<<<< HEAD
-            {% for message in messages %}
-                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <!-- Loan Form -->
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <!-- Borrower Information Section -->
-            <div class="section-title">Borrower Information</div>
-
-            <div class="form-card">
-                <label for="{{ borrower_form.name.id_for_label }}">Name</label>
-                {{ borrower_form.name }}
-                {% if borrower_form.name.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in borrower_form.name.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="form-card">
-                <label for="{{ borrower_form.phone.id_for_label }}">Phone</label>
-                {{ borrower_form.phone }}
-                {% if borrower_form.phone.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in borrower_form.phone.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="form-card">
-                <label for="{{ borrower_form.email.id_for_label }}">Email</label>
-                {{ borrower_form.email }}
-                {% if borrower_form.email.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in borrower_form.email.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="form-card">
-                <label for="{{ borrower_form.business_type.id_for_label }}">Loan Type</label>
-                {{ borrower_form.business_type }}
-                {% if borrower_form.business_type.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in borrower_form.business_type.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- Borrower ID Uploads -->
-            <div class="form-card">
-                <label for="{{ borrower_form.front_id.id_for_label }}">Front ID Photo</label>
-                <div class="upload-box">
-                    <i class="fas fa-camera"></i>
-                    {{ borrower_form.front_id }}
-                </div>
-                {% if borrower_form.front_id.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in borrower_form.front_id.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="form-card">
-                <label for="{{ borrower_form.back_id.id_for_label }}">Back ID Photo</label>
-                <div class="upload-box">
-                    <i class="fas fa-camera"></i>
-                    {{ borrower_form.back_id }}
-                </div>
-                {% if borrower_form.back_id.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in borrower_form.back_id.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- Loan Information Section -->
-            <div class="section-title">Loan Information</div>
-
-            <div class="form-card">
-                <label for="{{ loan_form.amount.id_for_label }}">Amount</label>
-                {{ loan_form.amount }}
-                {% if loan_form.amount.errors %}
-                    <div class="alert alert-danger">
-                        {% for error in loan_form.amount.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-=======
-            <div class="alert alert-{% if messages.tags %}{{ messages.tags }}{% else %}info{% endif %}">
+            {% if messages %}
                 {% for message in messages %}
-                    <p>{{ message }}</p>
+                    <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
                 {% endfor %}
-            </div>
-        {% endif %}
+            {% endif %}
 
-        <form method="POST" class="loan-form">
-            {% csrf_token %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
-            <h3>Borrower Information</h3>
-            <div class="form-column">
-                {% for field in borrower_form %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="alert alert-danger">
-                                {% for error in field.errors %}
-                                    <p>{{ error }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                <div class="card mb-3">
+                    <div class="card-header">Borrower Information</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            {% for field in borrower_form %}
+                                <div class="form-group col-md-6">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+                                    {% if field.errors %}
+                                        <div class="text-danger">{% for error in field.errors %}{{ error }} {% endfor %}</div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
 
+                <div class="card mb-3">
+                    <div class="card-header">Guarantor (Optional)</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            {% if guarantor_form %}
+                                {% for field in guarantor_form %}
+                                    <div class="form-group col-md-6">
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger">{% for error in field.errors %}{{ error }} {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No guarantor information provided.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
 
+                <div class="card mb-3">
+                    <div class="card-header">Loan Information</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            {% for field in loan_form %}
+                                <div class="form-group col-md-6">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger">{% for error in field.errors %}{{ error }} {% endfor %}</div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">Collateral (Optional)</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            {% for field in collateral_form %}
+                                <div class="form-group col-md-6">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger">{% for error in field.errors %}{{ error }} {% endfor %}</div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            {{ collateral_form.collateral_images.label_tag }}
+                            {{ collateral_form.collateral_images }}
+                            {% if collateral_form.collateral_images.errors %}
+                                <div class="text-danger">{% for error in collateral_form.collateral_images.errors %}{{ error }} {% endfor %}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Loan</button>
+            </form>
+        </div>
+        </body>
+        </html>
             <h3>Guarantor Information (Optional)</h3>
 <div class="form-column">
     {% for field in guarantor_form %}
@@ -192,11 +154,10 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
+
                     </div>
                 {% endfor %}
             </div>
-<<<<<<< HEAD
 
             <div class="form-card">
                 <label for="{{ loan_form.interest_rate.id_for_label }}">Interest Rate</label>
@@ -257,28 +218,11 @@
                         {% for error in collateral_form.description.errors %}
                             <p>{{ error }}</p>
                         {% endfor %}
-=======
-            
-            <h3>Collateral Information (Optional)</h3>
-            <div class="form-column">
-                {% for field in collateral_form %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="alert alert-danger">
-                                {% for error in field.errors %}
-                                    <p>{{ error }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
                     </div>
                 {% endfor %}
             </div>
             
 
-<<<<<<< HEAD
             <div class="form-card">
                 <label for="{{ collateral_form.value.id_for_label }}">Value</label>
                 {{ collateral_form.value }}
@@ -321,9 +265,6 @@
             </div>
 
             <button type="submit" class="submit-btn">Create Loan</button>
-=======
-            <button type="submit" class="btn btn-primary">Create Loan</button>
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
         </form>
     </div>
 </body>

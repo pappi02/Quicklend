@@ -2,17 +2,14 @@ from django.db import models
 from django.db.models import Sum
 from datetime import date
 
+
 # Borrowers Table
 class Borrower(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
-<<<<<<< HEAD
-    email = models.EmailField()
-=======
     id_number = models.CharField(max_length=10, blank=True)
     email = models.EmailField(blank=True)
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
     BUSINESS_TYPE_CHOICES = [
         ('student', 'Student'),
         ('business', 'Business'),
@@ -40,26 +37,8 @@ class Loan(models.Model):
         ('paid_off', 'Paid Off'),
     ]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
-<<<<<<< HEAD
     receipt_serial = models.CharField(max_length=20, blank=True, null=True, unique=True)
     receipt_hash = models.CharField(max_length=128, blank=True, null=True)
-    @property
-    def total_amount(self):
-        # Assuming you calculate total_amount based on the amount and interest rate
-        return self.amount + self.calculate_total_interest()
-    
-    
-    def __str__(self):
-        return f"Loan {self.id} for {self.borrower.name}"
-    
-    def calculate_total_interest(self):
-        """
-        Calculate the total interest for the loan using the flat-rate method.
-        """
-        return (self.amount * self.interest_rate ) / 100
-
-   
-=======
 
     def __str__(self):
         return f"Loan {self.id} for {self.borrower.name}"
@@ -67,7 +46,6 @@ class Loan(models.Model):
     @property
     def total_amount(self):
         return self.amount + self.calculate_total_interest()
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
 
     def calculate_total_interest(self):
         """Calculate the total interest for the loan using the flat-rate method."""
@@ -102,10 +80,9 @@ class Guarantor(models.Model):
     national_id = models.CharField(max_length=10, blank=True)
     phonenumber = models.CharField(max_length=15)
     emails = models.EmailField(blank=True)
-   
 
     def __str__(self):
-        return f"Guarantor: {self.name} for Loan {self.loan.id if self.loan else 'N/A'}"
+        return f"Guarantor: {self.names} for Loan {self.loan.id if self.loan else 'N/A'}"
 
 
 # Collateral Table
@@ -143,24 +120,14 @@ class Payment(models.Model):
     def save(self, *args, **kwargs):
         self.is_late = self.date > self.loan.end_date
         super().save(*args, **kwargs)
-<<<<<<< HEAD
-
-        # Update loan status after each payment
-        if self.loan.calculate_remaining_balance() <= 0:
-            self.loan.status = 'paid_off'
-        elif self.loan.status != 'paid_off' and self.is_late:
-            self.loan.status = 'past_due'
-
-        # Save the updated loan status
-        self.loan.save()
-=======
+        # After recording a payment, ensure loan status is updated and persisted
         self.loan.update_status()
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
+        self.loan.save()
 
     def __str__(self):
         return f"Payment {self.id} for Loan {self.loan.id}"
 
-<<<<<<< HEAD
+
 # Collateral Images Table
 class CollateralImage(models.Model):
     id = models.AutoField(primary_key=True)
@@ -169,8 +136,7 @@ class CollateralImage(models.Model):
 
     def __str__(self):
         return f"Image for Collateral {self.collateral.id}"
-=======
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
+
 
 # Transaction History Table
 class TransactionHistory(models.Model):
@@ -181,3 +147,4 @@ class TransactionHistory(models.Model):
 
     def __str__(self):
         return f"Transaction {self.id} for Loan {self.loan.id}"
+                

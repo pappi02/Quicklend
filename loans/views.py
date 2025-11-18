@@ -4,14 +4,8 @@ from datetime import date
 from django.conf import settings
 from django.contrib import messages  # Correct import for messages
 from django.shortcuts import render, get_object_or_404, redirect
-<<<<<<< HEAD
 from .forms import BorrowerForm, CollateralForm, LoanForm, PaymentForm
 from .models import Borrower, Loan, Collateral, CollateralImage
-=======
-import qrcode
-from .forms import BorrowerForm, CollateralForm, LoanForm, PaymentForm, GuarantorForm
-from .models import Borrower, Loan, Guarantor
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -121,17 +115,10 @@ def payment_confirmation(request, loan_id):
 @login_required
 def create_loan(request):
     if request.method == "POST":
-<<<<<<< HEAD
         # Initialize the forms with POST data and FILES
         borrower_form = BorrowerForm(request.POST, request.FILES)
         loan_form = LoanForm(request.POST)
         collateral_form = CollateralForm(request.POST, request.FILES)
-=======
-        borrower_form = BorrowerForm(request.POST)
-        loan_form = LoanForm(request.POST)
-        collateral_form = CollateralForm(request.POST)
-        guarantor_form = GuarantorForm(request.POST)
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
 
         if borrower_form.is_valid() and loan_form.is_valid() and guarantor_form.is_valid():
             email = borrower_form.cleaned_data['email']
@@ -140,7 +127,6 @@ def create_loan(request):
                 defaults={
                     'name': borrower_form.cleaned_data['name'],
                     'phone': borrower_form.cleaned_data['phone'],
-<<<<<<< HEAD
                     'business_type': borrower_form.cleaned_data['business_type'],
                     'front_id': borrower_form.cleaned_data.get('front_id'),
                     'back_id': borrower_form.cleaned_data.get('back_id'),
@@ -157,47 +143,29 @@ def create_loan(request):
                 borrower.save()
 
             # Create and save the loan
-=======
-                    'business_type': borrower_form.cleaned_data['business_type']
-                }
-            )
-
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
             loan = loan_form.save(commit=False)
             loan.borrower = borrower
             loan.save()
 
-<<<<<<< HEAD
             # Initialize collateral to None
             collateral = None
 
             # If collateral form is valid, save collateral
-=======
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
             if collateral_form.is_valid():
                 collateral = collateral_form.save(commit=False)
                 collateral.loan = loan
                 collateral.save()
 
-<<<<<<< HEAD
                 # Handle multiple collateral images
                 images = request.FILES.getlist('collateral_images')
                 for image in images:
                     CollateralImage.objects.create(collateral=collateral, image=image)
 
             # Generate the loan agreement and receipt PDF
-=======
-            guarantor = guarantor_form.save(commit=False)
-            guarantor.loan = loan
-            guarantor.save()
-
-            # Prepare loan data for PDF generation
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
             loan_data = {
                 'date': loan.start_date.strftime('%Y-%m-%d'),  # Agreement date
                 'agreement_number': f"LN-{loan.id}",  # Unique loan agreement number
                 'borrower_name': borrower.name,
-<<<<<<< HEAD
                 'loan_amount': loan.amount,
                 'total_amount': loan.total_amount,  # Ensure total_amount exists
                 'start_date': loan.start_date,
@@ -209,35 +177,9 @@ def create_loan(request):
 
             # Set the file path for saving the PDF (ensure the directory exists)
             pdf_directory = os.path.join(settings.MEDIA_ROOT, 'pdfs')  # Use MEDIA_ROOT for cross-platform compatibility
-=======
-                'borrower_phone': borrower.phone,
-                'borrower_id_number': borrower.id_number,  # Assuming ID is used as borrower ID
-                'borrower_email': borrower.email,
-                'business_type': borrower.business_type,
-                'loan_amount': f"{loan.amount:,.2f}",  # Format with commas
-                'interest_rate': loan.interest_rate,
-                'repayment_period': loan.repayment_period_weeks,
-                'start_date': loan.start_date.strftime('%d-%m-%Y'),
-                'end_date': loan.end_date.strftime('%d-%m-%Y'),
-                'guarantor_required': True if guarantor else False,
-                'guarantor_names': guarantor.names if guarantor else "N/A",
-                'guarantor_phonnumber': guarantor.phonenumber if guarantor else "N/A",
-                'guarantor_emails': guarantor.emails if guarantor else "N/A",
-                'guarantor_national_id': guarantor.national_id if guarantor else "N/A",
-                'collateral_description': collateral.description if collateral else "None",
-                'collateral_value': f"{collateral.value:,.2f}" if collateral else "0.00",
-                'collateral_acquired': True if collateral else False,
-                'repayment_schedule': f"Weekly Payments of {loan.amount / loan.repayment_period_weeks:,.2f} KES",
-                'repayment_method': "Mobile Money (Mpesa)",  # Default repayment method
-            }
-
-            # Generate PDF
-            pdf_directory = os.path.join(settings.BASE_DIR, 'media', 'pdfs')
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
             if not os.path.exists(pdf_directory):
                 os.makedirs(pdf_directory)
 
-<<<<<<< HEAD
             # Include the file name in the path
             pdf_file_path = os.path.join(pdf_directory, 'loan_agreement_receipt.pdf')
 
@@ -262,17 +204,6 @@ def create_loan(request):
 
             # Redirect to loan creation success page
             return redirect('loan_creation_success')  # Update this to the success URL
-=======
-            pdf_file_path = os.path.join(pdf_directory, f'loan_agreement_{loan.id}.pdf')
-            generate_loan_pdf(loan_data, pdf_file_path)
-
-            # Send the PDF as an email attachment
-            send_email_with_attachment(borrower.email, pdf_file_path)
-
-            messages.success(request, 'Loan created successfully. PDF receipt sent via email.')
-            return redirect('loan_creation_success')
-
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
         else:
             messages.error(request, 'There were errors in the form, please correct them.')
 
@@ -313,7 +244,6 @@ def send_sms_with_link(phone_number, sms_link):
         print(f"Error sending SMS: {e}")
 '''
 
-<<<<<<< HEAD
 def send_email_with_attachment(email, pdf_file_path):
     """
     Function to send an HTML email with the PDF attached.
@@ -381,32 +311,16 @@ def send_email_with_attachment(email, pdf_file_path):
     </html>
     """
     plain_message = "Dear borrower, your loan agreement and receipt are attached to this email."
-=======
-
-def send_email_with_attachment(email, pdf_file_path):
-    """
-    Function to send an email with the loan agreement PDF as an attachment.
-    """
-    subject = 'Your Loan Agreement and Receipt'
-    message = "Dear borrower, attached is your loan agreement and receipt."
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
     from_email = settings.EMAIL_HOST_USER
     recipient_list = [email]
 
     email_message = EmailMessage(subject, message, from_email, recipient_list)
 
     try:
-<<<<<<< HEAD
         email_message = EmailMessage(subject, plain_message, from_email, recipient_list)
         email_message.attach_file(pdf_file_path, 'application/pdf')
         email_message.send()
         print(f"Email with attachment sent to {email}")
-=======
-        # Attach the PDF file to the email
-        email_message.attach_file(pdf_file_path)
-        email_message.send()
-        print(f"Email sent with PDF attachment to {email}")
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
     except Exception as e:
         print(f"Error sending email with attachment: {e}")
 
@@ -650,7 +564,6 @@ def dashboard(request):
 
 
 
-<<<<<<< HEAD
 # Function to generate the loan PDF with enhanced styling and signature
 def generate_loan_pdf(loan_data, file_path):
     c = canvas.Canvas(file_path, pagesize=A6)  # Adjusted to A6 for a compact look
@@ -757,8 +670,6 @@ def add_digital_signature(input_pdf_path, output_pdf_path, signature_text):
     with open(output_pdf_path, "wb") as output_pdf:
         writer.write(output_pdf)
 
-=======
->>>>>>> f2f9c1d976812b830664e594ea0c0e39c4597d07
 
 
 
