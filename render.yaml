@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: quicklend
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn quicklend.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        value: django-insecure-!q5echi!=v^r3!aa21j(@oo_a=3xmdt@*a$dgh3_mq-3q_bvp&
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: quicklend.onrender.com
+      - key: DATABASE_URL
+        value: postgresql://quicklend_db_user:password@db:5432/quicklend_db
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://quicklend.onrender.com

@@ -1,5 +1,10 @@
 import os
 from pathlib import Path
+import dj_database_url
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,12 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!q5echi!=v^r3!aa21j(@oo_a=3xmdt@*a$dgh3_mq-3q_bvp&'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-!q5echi!=v^r3!aa21j(@oo_a=3xmdt@*a$dgh3_mq-3q_bvp&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -35,6 +40,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,10 +75,11 @@ WSGI_APPLICATION = 'quicklend.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
@@ -115,6 +122,9 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# WhiteNoise settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Enable the OTP static plugin
@@ -176,6 +186,5 @@ DEFAULT_FROM_EMAIL = 'pappichulo2002@gmail.com'
 #TWILIO_AUTH_TOKEN = '4a4ee1b9b075000f870273304373e287'
 #TWILIO_PHONE_NUMBER = '+14242709645'
 CSRF_TRUSTED_ORIGINS = [
-    "https://quicklend.site",
-    "https://www.quicklend.site",  # optional, if applicable
+    "https://quicklend.onrender.com",
 ]
