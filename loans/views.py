@@ -13,7 +13,7 @@ from django.db.models import Q
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from django.core.mail import send_mail
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import A6
 from reportlab.lib import colors
 from io import BytesIO
@@ -29,7 +29,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
 import io
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 
 
 
