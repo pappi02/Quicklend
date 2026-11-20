@@ -4,7 +4,7 @@ from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
 import os
 import io
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from .utils_security import generate_serial, sha256_of_file, make_qr_image

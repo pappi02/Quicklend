@@ -1,0 +1,56 @@
+name: Django checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    env:
+      DJANGO_SETTINGS_MODULE: quicklend.settings
+      SECRET_KEY: ci-only-not-secret
+      DEBUG: "True"
+      ALLOWED_HOSTS: "*"
+      DATABASE_URL: sqlite:///ci.sqlite3
+      EMAIL_HOST_USER: ci@example.com
+      EMAIL_HOST_PASSWORD: ci-only
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ./requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Django system checks
+        run: python manage.py check
+      - name: Migrations apply cleanly
+        run: python manage.py migrate --noinput
+      - name: Import every app module
+        run: |
+          python - <<'PY'
+          import os, pkgutil, importlib, django, sys
+          django.setup()
+          from django.apps import apps
+          bad = []
+          for cfg in apps.get_app_configs():
+              if not cfg.path.startswith(os.getcwd()):
+                  continue
+              for m in pkgutil.walk_packages([cfg.path], cfg.name + "."):
+                  if ".migrations" in m.name or ".tests" in m.name or m.name.split(".")[-1].startswith("test"):
+                      continue
+                  try:
+                      importlib.import_module(m.name)
+                  except Exception as e:
+                      bad.append(f"{m.name}: {type(e).__name__}: {e}")
+          print("\n".join(bad) or "all app modules import")
+          sys.exit(1 if bad else 0)
+          PY
